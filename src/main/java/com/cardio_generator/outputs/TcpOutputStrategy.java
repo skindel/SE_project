@@ -6,12 +6,20 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.Executors;
 
+/**
+ * Handles data output via TCP server
+ */
 public class TcpOutputStrategy implements OutputStrategy {
 
     private ServerSocket serverSocket;
     private Socket clientSocket;
     private PrintWriter out;
 
+    /**
+     * Starts TCP server and manages connection requests
+     * 
+     * @param port number of the port that the server is supposed to host on 
+     */
     public TcpOutputStrategy(int port) {
         try {
             serverSocket = new ServerSocket(port);
@@ -32,6 +40,9 @@ public class TcpOutputStrategy implements OutputStrategy {
         }
     }
 
+     /**
+     * {@inheritDoc}
+     */
     @Override
     public void output(int patientId, long timestamp, String label, String data) {
         if (out != null) {

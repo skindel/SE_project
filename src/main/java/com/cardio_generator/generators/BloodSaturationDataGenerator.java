@@ -4,19 +4,32 @@ import java.util.Random;
 
 import com.cardio_generator.outputs.OutputStrategy;
 
+/* 
+ * Handles generating blood saturation data for patients.
+*/
 public class BloodSaturationDataGenerator implements PatientDataGenerator {
     private static final Random random = new Random();
     private int[] lastSaturationValues;
 
+    /**
+     * Initializes baseline values for all patients
+     * 
+     * @param patientCount number of patients
+     */
     public BloodSaturationDataGenerator(int patientCount) {
         lastSaturationValues = new int[patientCount + 1];
 
-        // Initialize with baseline saturation values for each patient
         for (int i = 1; i <= patientCount; i++) {
             lastSaturationValues[i] = 95 + random.nextInt(6); // Initializes with a value between 95 and 100
         }
     }
 
+/**
+   * Generates blood saturation data for a patient
+   *
+   * @param patientId the unique identifier of the patient
+   * @param outputStrategy format and types of output
+   */
     @Override
     public void generate(int patientId, OutputStrategy outputStrategy) {
         try {
@@ -31,7 +44,7 @@ public class BloodSaturationDataGenerator implements PatientDataGenerator {
                     Double.toString(newSaturationValue) + "%");
         } catch (Exception e) {
             System.err.println("An error occurred while generating blood saturation data for patient " + patientId);
-            e.printStackTrace(); // This will print the stack trace to help identify where the error occurred.
+            e.printStackTrace();
         }
     }
 }

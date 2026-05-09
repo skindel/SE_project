@@ -1,6 +1,9 @@
 package com.alerts;
 
-// Represents an alert
+// changed comment format to multiline
+/*
+ * Represents an alert
+ */
 public class Alert {
     private String patientId;
     private String condition;
