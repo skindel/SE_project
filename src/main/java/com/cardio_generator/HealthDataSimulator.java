@@ -5,6 +5,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import com.cardio_generator.generators.AlertGenerator;
+import com.alerts.AlertManager;
 
 import com.cardio_generator.generators.BloodPressureDataGenerator;
 import com.cardio_generator.generators.BloodSaturationDataGenerator;
@@ -15,6 +16,8 @@ import com.cardio_generator.outputs.FileOutputStrategy;
 import com.cardio_generator.outputs.OutputStrategy;
 import com.cardio_generator.outputs.TcpOutputStrategy;
 import com.cardio_generator.outputs.WebSocketOutputStrategy;
+import com.data_management.DataStorage;
+import com.data_management.FileDataReader;
 
 import java.util.Collections;
 import java.util.List;
@@ -32,7 +35,7 @@ public class HealthDataSimulator {
 
     private static int patientCount = 50; // Default number of patients
     private static ScheduledExecutorService scheduler;
-    private static OutputStrategy outputStrategy = new ConsoleOutputStrategy(); // Default output strategy
+    private static OutputStrategy outputStrategy = new ConsoleOutputStrategy();
     private static final Random random = new Random();
     
     /**
@@ -95,6 +98,10 @@ public class HealthDataSimulator {
                                 Files.createDirectories(outputPath);
                             }
                             outputStrategy = new FileOutputStrategy(baseDirectory);
+                            DataStorage ds = new DataStorage();
+                            AlertManager alertManager = new AlertManager(ds);   
+                            FileDataReader fr = new FileDataReader(baseDirectory, alertManager, ds);
+                            fr.readData();
                         } else if (outputArg.startsWith("websocket:")) {
                             try {
                                 int port = Integer.parseInt(outputArg.substring(10));

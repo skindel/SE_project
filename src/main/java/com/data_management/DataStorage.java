@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import com.alerts.AlertGenerator;
+import com.alerts.AlertManager;
 
 /**
  * Manages storage and retrieval of patient data within a healthcare monitoring
@@ -76,6 +76,15 @@ public class DataStorage {
     }
 
     /**
+     * 
+     * @param patientId the unique identifier of the patient to retrieve
+     * @return patient with this id
+     */
+    public Patient getPatient(int patientId) {
+        return patientMap.get(patientId);
+    }
+
+    /**
      * The main method for the DataStorage class.
      * Initializes the system, reads data into storage, and continuously monitors
      * and evaluates patient data.
@@ -101,11 +110,6 @@ public class DataStorage {
         }
 
         // Initialize the AlertGenerator with the storage
-        AlertGenerator alertGenerator = new AlertGenerator(storage);
-
-        // Evaluate all patients' data to check for conditions that may trigger alerts
-        for (Patient patient : storage.getAllPatients()) {
-            alertGenerator.evaluateData(patient);
-        }
+        AlertManager alertGenerator = new AlertManager(storage);
     }
 }
