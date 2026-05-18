@@ -1,4 +1,4 @@
-package data_management.custom_test;
+package data_management;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

@@ -1,4 +1,4 @@
-package data_management.custom_test;
+package data_management;
 
 import com.data_management.DataStorage;
 
