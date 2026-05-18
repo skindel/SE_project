@@ -1,0 +1,2 @@
+The parts of the code that were not tested include the parts that remained unchanged (or mostly unchanged) since the fork. This means: data generation, parts of storage. 
+The decision to not include test for them is motivated by my trust in the quality of the code provided by the professors.
