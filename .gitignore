@@ -10,6 +10,7 @@ buildNumber.properties
 .mvn/timing.properties
 
 src/main/resources
+src/test/resources
 
 ### IntelliJ IDEA ###
 .idea/

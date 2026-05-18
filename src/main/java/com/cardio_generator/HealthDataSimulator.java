@@ -98,10 +98,6 @@ public class HealthDataSimulator {
                                 Files.createDirectories(outputPath);
                             }
                             outputStrategy = new FileOutputStrategy(baseDirectory);
-                            DataStorage ds = new DataStorage();
-                            AlertManager alertManager = new AlertManager(ds);   
-                            FileDataReader fr = new FileDataReader(baseDirectory, alertManager, ds);
-                            fr.readData();
                         } else if (outputArg.startsWith("websocket:")) {
                             try {
                                 int port = Integer.parseInt(outputArg.substring(10));
@@ -132,6 +128,19 @@ public class HealthDataSimulator {
                     System.exit(1);
             }
         }
+    }
+
+    public static void simulateFile(){
+        String baseDirectory = "src/main/resources";
+        Path outputPath = Paths.get(baseDirectory);
+        if (!Files.exists(outputPath)) {
+            try{
+                Files.createDirectories(outputPath);
+            } catch (Exception e) {
+                System.err.println("Error creating output directory: " + e.getMessage());
+            }
+        }
+        outputStrategy = new FileOutputStrategy(baseDirectory);
     }
 
     /**

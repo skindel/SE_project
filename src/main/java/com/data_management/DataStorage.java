@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
 import com.alerts.AlertManager;
 
 /**
@@ -14,6 +16,8 @@ import com.alerts.AlertManager;
  */
 public class DataStorage {
     private Map<Integer, Patient> patientMap; // Stores patient objects indexed by their unique patient ID.
+        // queue for checking updates in patient data and generating alerts - concurrent so that it can work with multiple threads
+    private ConcurrentLinkedQueue<PatientUpdate> updateQueue;
 
     /**
      * Constructs a new instance of DataStorage, initializing the underlying storage
@@ -21,6 +25,7 @@ public class DataStorage {
      */
     public DataStorage() {
         this.patientMap = new HashMap<>();
+        this.updateQueue = new ConcurrentLinkedQueue<>();
     }
 
     /**
@@ -43,6 +48,11 @@ public class DataStorage {
             patientMap.put(patientId, patient);
         }
         patient.addRecord(measurementValue, recordType, timestamp);
+        updateQueue.add(new PatientUpdate(patient, recordType));
+    }
+
+    public ConcurrentLinkedQueue<PatientUpdate> getUpdateQueue(){
+        return this.updateQueue;
     }
 
     /**

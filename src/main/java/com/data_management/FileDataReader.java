@@ -6,7 +6,6 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import com.alerts.AlertManager;
-import com.alerts.PatientUpdate;
 
 /**
  * Reads and saves data from files specified in baseDirectory (filenames hardcoded due to the)
@@ -16,16 +15,14 @@ public class FileDataReader implements DataReader {
     private String baseDirectory;
     private static ScheduledExecutorService scheduler;
     private DataStorage dataStorage;
-    private AlertManager alertGenerator;
     // keeps track of last line read in each file to avoid re-reading the entire file eat each call.
     private Map<String, Long> lastFilePositions = new ConcurrentHashMap<>();
 
     /**
      * @param baseDirectory directory where all data files are saved and edited.
      */
-    public FileDataReader(String baseDirectory, AlertManager alertGenerator, DataStorage dataStorage) {
-        this.baseDirectory = baseDirectory;
-        this.alertGenerator = alertGenerator;
+    public FileDataReader(String baseDirectory, DataStorage dataStorage) {
+        this.baseDirectory = baseDirectory;;
         this.dataStorage = dataStorage;
         // one thread per each file
         scheduler = Executors.newScheduledThreadPool(8);
@@ -111,7 +108,6 @@ public class FileDataReader implements DataReader {
         long timestamp = Long.parseLong(vals.get("Timestamp"));
 
         dataStorage.addPatientData(patientId, measurementValue, label, timestamp);
-        alertGenerator.addPatientUpdate(new PatientUpdate(patientId, label));
     }
 
     /**

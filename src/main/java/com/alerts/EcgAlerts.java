@@ -19,7 +19,7 @@ public class EcgAlerts extends AlertConditionChecker {
         
         List<PatientRecord> pastEcgValues = pastNMeasurements("ECG", records, windowSize);
         
-        if(aboveMean(pastEcgValues)){
+        if(aboveMean(pastEcgValues) && pastEcgValues.size() >= windowSize){
             Alert alert = new Alert(String.valueOf(patientId), "Abnormal ECG pattern", System.currentTimeMillis());
             alerts.add(alert);
         }
@@ -29,6 +29,7 @@ public class EcgAlerts extends AlertConditionChecker {
      * checks if latest value is above mean of preious 20 measurements by more than treshold percentage
      * @param values list of values
      * @return true if latest value is above mean by more than treshold value, false otherwise
+     * 
      */
     public boolean aboveMean(List<PatientRecord> values){
         if(values.size() < windowSize){
