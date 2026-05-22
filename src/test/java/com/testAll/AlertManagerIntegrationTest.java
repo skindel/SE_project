@@ -21,7 +21,7 @@ public class AlertManagerIntegrationTest {
         System.setOut(new PrintStream(baos));
 
         try {
-            DataStorage storage = new DataStorage();
+            DataStorage storage = DataStorage.getInstance();
             AlertManager manager = new AlertManager(storage);
 
             long now = System.currentTimeMillis();

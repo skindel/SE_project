@@ -1,0 +1,1 @@
+I am already using a strategy in my 'working' code just not naming it StrategySomething :))

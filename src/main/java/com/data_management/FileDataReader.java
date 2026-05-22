@@ -90,7 +90,7 @@ public class FileDataReader implements DataReader {
     
         if(vals.get("Label").equals("Alert")){
             // numerical encoding of triggered/other for easier processing alerts
-            if(vals.get("Data").equals("Triggered")){
+            if(vals.get("Data").equals("triggered")){
                 vals.put("Data", "1");
             } else {
                 vals.put("Data", "0");
@@ -106,7 +106,7 @@ public class FileDataReader implements DataReader {
         double measurementValue = Double.parseDouble(vals.get("Data"));
         String label = vals.get("Label");
         long timestamp = Long.parseLong(vals.get("Timestamp"));
-
+        // System.out.println("Read data for patient " + patientId + " at " + timestamp + " for " + label + ": " + measurementValue);
         dataStorage.addPatientData(patientId, measurementValue, label, timestamp);
     }
 

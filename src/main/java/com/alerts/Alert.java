@@ -5,9 +5,9 @@ package com.alerts;
  * Represents an alert
  */
 public class Alert {
-    private String patientId;
-    private String condition;
-    private long timestamp;
+    protected String patientId;
+    protected String condition;
+    protected long timestamp;
 
     public Alert(String patientId, String condition, long timestamp) {
         this.patientId = patientId;

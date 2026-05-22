@@ -33,11 +33,20 @@ import java.util.ArrayList;
  */
 public class HealthDataSimulator {
 
-    private static int patientCount = 50; // Default number of patients
+    private static int patientCount = 200; // Default number of patients
     private static ScheduledExecutorService scheduler;
-    private static OutputStrategy outputStrategy = new ConsoleOutputStrategy();
     private static final Random random = new Random();
+    private static OutputStrategy outputStrategy = new ConsoleOutputStrategy();
     
+    public static HealthDataSimulator instance;
+
+
+
+    private HealthDataSimulator(){};
+
+    public static HealthDataSimulator getInstance(){
+        return instance;
+    }
     /**
      * Parses command-line arguments, initializes the scheduled executor service
      * and schedules data generation tasks for all patients.
@@ -169,7 +178,7 @@ public class HealthDataSimulator {
      * @param patientCount the total number of patients to create IDs for
      * @return a list containing sequential patient IDs starting from 1
      */
-    private static List<Integer> initializePatientIds(int patientCount) {
+    public static List<Integer> initializePatientIds(int patientCount) {
         List<Integer> patientIds = new ArrayList<>();
         for (int i = 1; i <= patientCount; i++) {
             patientIds.add(i);

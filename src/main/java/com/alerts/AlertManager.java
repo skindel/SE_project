@@ -1,5 +1,6 @@
 package com.alerts;
 
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +28,7 @@ public class AlertManager {
     private final DataStorage dataStorage;
     private final ScheduledExecutorService scheduler;
 
-    private final ConcurrentLinkedQueue<PatientUpdate> updateQueue;
+    private ConcurrentLinkedQueue<PatientUpdate> updateQueue;
 
 
 
@@ -50,8 +51,6 @@ public class AlertManager {
         this.scheduler = Executors.newScheduledThreadPool(1);
         scheduler.scheduleAtFixedRate(() -> processUpdates(), 0, 200, TimeUnit.MILLISECONDS);
     }
-
-
 
     /**
      * Provess all queued updates and parses to evaluate for alerts.
@@ -90,5 +89,9 @@ public class AlertManager {
      */
     private void triggerAlert(Alert alert) {
         System.out.println("ALERT: " + alert.getCondition() + " for patient " + alert.getPatientId() + " at " + alert.getTimestamp());
+    }
+
+    public DataStorage getStorage(){
+        return dataStorage;
     }
 }

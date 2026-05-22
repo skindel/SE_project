@@ -15,7 +15,7 @@ public class DataStorageTests {
 
     @Test
     public void addAndRetrieve() {
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
         long now = System.currentTimeMillis();
 
         storage.addPatientData(10, 120.0, "SystolicPressure", now - 2000);
@@ -29,7 +29,7 @@ public class DataStorageTests {
 
     @Test
     public void getAllPatientsAndGetPatient() {
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
         storage.addPatientData(1, 100.0, "ECG", System.currentTimeMillis());
         storage.addPatientData(2, 95.0, "Saturation", System.currentTimeMillis());
 

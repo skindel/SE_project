@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import com.alerts.AlertManager;
+import com.cardio_generator.HealthDataSimulator;
 
 /**
  * Manages storage and retrieval of patient data within a healthcare monitoring
@@ -18,14 +19,21 @@ public class DataStorage {
     private Map<Integer, Patient> patientMap; // Stores patient objects indexed by their unique patient ID.
         // queue for checking updates in patient data and generating alerts - concurrent so that it can work with multiple threads
     private ConcurrentLinkedQueue<PatientUpdate> updateQueue;
+    public static DataStorage instance;
 
     /**
      * Constructs a new instance of DataStorage, initializing the underlying storage
      * structure.
      */
-    public DataStorage() {
+    private DataStorage() {
         this.patientMap = new HashMap<>();
         this.updateQueue = new ConcurrentLinkedQueue<>();
+    }
+
+
+
+    public static DataStorage getInstance(){
+        return instance;
     }
 
     /**
