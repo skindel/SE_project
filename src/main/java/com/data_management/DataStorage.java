@@ -19,7 +19,7 @@ public class DataStorage {
     private Map<Integer, Patient> patientMap; // Stores patient objects indexed by their unique patient ID.
         // queue for checking updates in patient data and generating alerts - concurrent so that it can work with multiple threads
     private ConcurrentLinkedQueue<PatientUpdate> updateQueue;
-    public static DataStorage instance;
+    private static volatile DataStorage instance;
 
     /**
      * Constructs a new instance of DataStorage, initializing the underlying storage
@@ -33,6 +33,13 @@ public class DataStorage {
 
 
     public static DataStorage getInstance(){
+        if (instance == null) {
+            synchronized (DataStorage.class) {
+                if (instance == null) {
+                    instance = new DataStorage();
+                }
+            }
+        }
         return instance;
     }
 

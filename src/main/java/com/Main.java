@@ -1,44 +1,68 @@
 package com;
 
-import com.data_management.*;
+import com.data_management.DataStorage;
+import com.data_management.WebSocketClient;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
+import java.net.URI;
 import java.util.Random;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
-import com.alerts.*;
-import com.cardio_generator.generators.*;
-import com.cardio_generator.outputs.*;
+import com.alerts.AlertManager;
 import com.cardio_generator.HealthDataSimulator;
-import com.cardio_generator.generators.AlertGenerator;
-import com.cardio_generator.generators.BloodLevelsDataGenerator;
-import com.cardio_generator.generators.BloodPressureDataGenerator;
-import com.cardio_generator.generators.BloodSaturationDataGenerator;
-import com.cardio_generator.generators.ECGDataGenerator;
-
 
 public class Main {
     private static final Random random = new Random();
-    private static ScheduledExecutorService scheduler;
-    public static void main(String[] args) {
-        String baseDirectory = "src/main/resources";
-        
-        DataStorage dataStorage = DataStorage.getInstance();
-        FileDataReader dataReader = new FileDataReader(baseDirectory, dataStorage);
-        AlertManager alertManager = new AlertManager(dataStorage);
 
-        try{
+    public static void main(String[] args) {
+
+         // start the simulator (generators may produce file output or other transports)
+        try {
             HealthDataSimulator.main(args);
-            dataReader.readData();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
 
+        
+        String defaultWs = "ws://localhost:8080";
+
+        // create storage and alert manager
+        DataStorage dataStorage = DataStorage.getInstance();
+        AlertManager alertManager = new AlertManager(dataStorage);
+
+        // determine websocket URI from arguments (--ws=ws://host:port)
+        String wsUri = defaultWs;
+        // for (int i = 0; i < args.length; i++) {
+        //     if (args[i].equals("--output")) {
+        //         if(args[i+1].equals("websocket")){
+        //             wsUri=
+        //         }
+        //     }
+        // }
+
+        WebSocketClient wsClient = null;
+        try {
+            wsClient = new WebSocketClient(new URI(wsUri), dataStorage);
+            wsClient.startClient();
+        } catch (Exception e) {
+            System.err.println("Failed to start WebSocket client: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        // graceful shutdown: stop websocket client on JVM exit
+        final WebSocketClient finalClient = wsClient;
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            if (finalClient != null) {
+                finalClient.stopClient();
+            }
+        }));
+
+       
+
+        // keep main thread alive while background threads run
+        try {
+            Thread.currentThread().join();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 
 }

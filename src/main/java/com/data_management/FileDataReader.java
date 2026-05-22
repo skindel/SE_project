@@ -79,7 +79,7 @@ public class FileDataReader implements DataReader {
      * 
      * @param line one entry from any of the data files
      */
-    private void processData(String line){
+    public void processData(String line){
         String[] parts = line.split(", ");
 
         Map<String, String> vals = new HashMap<>();
