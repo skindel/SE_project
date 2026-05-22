@@ -8,12 +8,12 @@ import com.data_management.PatientRecord;
 public class BloodPressureAlerts extends AlertConditionChecker {
     
     @Override
-    public void checkPatient(Patient patient, List<Alert> alerts) {
+    public void checkPatient(Patient patient, List<Alert> alerts, long timestamp) {
         List<PatientRecord> records = patient.getAllRecords();
         int patientId = patient.getPatientId();
         
-        List<PatientRecord> pastThreeSystolic = pastNMeasurements("SystolicPressure", records, 3);
-        List<PatientRecord> pastThreeDiastolic = pastNMeasurements("DiastolicPressure", records, 3);
+        List<PatientRecord> pastThreeSystolic = pastNMeasurements("SystolicPressure", records, 3, timestamp);
+        List<PatientRecord> pastThreeDiastolic = pastNMeasurements("DiastolicPressure", records, 3, timestamp);
 
         if(increasingTrend(pastThreeDiastolic) || increasingTrend(pastThreeSystolic)){
             Alert alert = new Alert(String.valueOf(patientId), "Increasing blood pressure trend", System.currentTimeMillis());

@@ -8,15 +8,27 @@ import com.data_management.PatientRecord;
 
 public abstract class AlertConditionChecker {
     // returns list of alerts for a patient
-    public abstract void checkPatient(Patient patient, List<Alert> alerts);
+    public abstract void checkPatient(Patient patient, List<Alert> alerts, long timestamp);
 
+    private List<PatientRecord> entriesTillTimestamp(List<PatientRecord> records, long timestamp){
+        List<PatientRecord> recTimestamp = new ArrayList<>();
+        for(int i = 0; i < records.size(); i++){
+            if(records.get(i).getTimestamp()<=timestamp){
+                recTimestamp.add(records.get(i));
+            } else {
+                break;
+            }
+        }
+        return recTimestamp;
+    }
     /**
      * Helper method to get measurements of a specific type
      * @param type type of measurement
      * @param records lsit of patient records to check
-     * @return list of values for measurement
+     * @return values of required measurement
      */
-    protected List<Double> getMeasurements(String type, List<PatientRecord> records){
+    protected List<Double> getMeasurements(String type, List<PatientRecord> records, long timestamp){
+        records = entriesTillTimestamp(records, timestamp);
         List<Double> measurements = new ArrayList<>();
         for(PatientRecord r : records){
             if(type.equals(r.getRecordType())){
@@ -33,7 +45,8 @@ public abstract class AlertConditionChecker {
      * @param n number of measurements to get
      * @return list of values for measurement
      */
-    protected List<PatientRecord> pastNMeasurements(String type, List<PatientRecord> records, int n){
+    protected List<PatientRecord> pastNMeasurements(String type, List<PatientRecord> records, int n, long timestamp){
+        records = entriesTillTimestamp(records, timestamp);
         List<PatientRecord> measurements = new ArrayList<>();
         for(int i = records.size() - 1; i >= 0 && measurements.size() < n; i--){
             if(type.equals(records.get(i).getRecordType())){

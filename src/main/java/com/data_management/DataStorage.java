@@ -48,7 +48,7 @@ public class DataStorage {
             patientMap.put(patientId, patient);
         }
         patient.addRecord(measurementValue, recordType, timestamp);
-        updateQueue.add(new PatientUpdate(patient, recordType));
+        updateQueue.add(new PatientUpdate(patient, recordType, timestamp));
     }
 
     public ConcurrentLinkedQueue<PatientUpdate> getUpdateQueue(){

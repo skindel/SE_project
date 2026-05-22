@@ -60,7 +60,7 @@ public class AlertManager {
         while(!updateQueue.isEmpty()){
             PatientUpdate update = updateQueue.poll();
             if(update != null){
-                evaluatePatientParameter(update.getPatient(), update.getMeasurementType());
+                evaluatePatientParameter(update.getPatient(), update.getMeasurementType(), update.getTimestamp());
             }
         }
     }
@@ -71,11 +71,11 @@ public class AlertManager {
      * @param patient the patient data to evaluate.
      * @param recordType the type of record to evaluate.
      */
-    public void evaluatePatientParameter(Patient patient, String recordType) {
+    public void evaluatePatientParameter(Patient patient, String recordType, long timestamp) {
         List<Alert> alerts = new ArrayList<>();
         if(alertCheckers.containsKey(recordType)){
             for(AlertConditionChecker checker : alertCheckers.get(recordType)){
-                checker.checkPatient(patient, alerts);
+                checker.checkPatient(patient, alerts, timestamp);
             }
         }
         for(Alert alert : alerts){

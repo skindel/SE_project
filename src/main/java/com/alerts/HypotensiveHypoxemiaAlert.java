@@ -10,10 +10,11 @@ import com.data_management.PatientRecord;
  */
 public class HypotensiveHypoxemiaAlert extends AlertConditionChecker {
     @Override
-    public void checkPatient(Patient patient, List<Alert> alerts){
+    public void checkPatient(Patient patient, List<Alert> alerts, long timestamp){
         List<PatientRecord> records = patient.getAllRecords();
-        double latestSystolic = pastNMeasurements("Systolic", records, 1).get(0).getMeasurementValue();
-        double latestSaturation = pastNMeasurements("BloodSaturation", records, 1).get(0).getMeasurementValue();
+        
+        double latestSystolic = pastNMeasurements("Systolic", records, 1,timestamp).get(0).getMeasurementValue();
+        double latestSaturation = pastNMeasurements("BloodSaturation", records, 1, timestamp).get(0).getMeasurementValue();
 
         int patientId = patient.getPatientId();
 

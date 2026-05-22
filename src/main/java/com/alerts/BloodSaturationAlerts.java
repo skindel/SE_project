@@ -7,9 +7,9 @@ import com.data_management.PatientRecord;
 
 public class BloodSaturationAlerts extends AlertConditionChecker {
     @Override
-    public void checkPatient(Patient patient, List<Alert> alerts) {
+    public void checkPatient(Patient patient, List<Alert> alerts, long timestamp) {
         List<PatientRecord> records = patient.getRecords(System.currentTimeMillis() - 600000, System.currentTimeMillis());
-        List<Double> saturationLevels = getMeasurements("Saturation", records);
+        List<Double> saturationLevels = getMeasurements("Saturation", records, timestamp);
         int patientId = patient.getPatientId();
 
         if(saturationLevels.get(0)<92){

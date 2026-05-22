@@ -13,11 +13,11 @@ public class EcgAlerts extends AlertConditionChecker {
     private final double treshold = 1;
 
     @Override
-    public void checkPatient(Patient patient, List<Alert> alerts) {
+    public void checkPatient(Patient patient, List<Alert> alerts, long timestamp) {
         List<PatientRecord> records = patient.getAllRecords();
         int patientId = patient.getPatientId();
         
-        List<PatientRecord> pastEcgValues = pastNMeasurements("ECG", records, windowSize);
+        List<PatientRecord> pastEcgValues = pastNMeasurements("ECG", records, windowSize, timestamp);
         
         if(aboveMean(pastEcgValues) && pastEcgValues.size() >= windowSize){
             Alert alert = new Alert(String.valueOf(patientId), "Abnormal ECG pattern", System.currentTimeMillis());
