@@ -6,10 +6,6 @@ import java.util.Map;
 
 /**
  * WebSocket client that connects to a server, parses incoming messages and stores
- * them into the provided DataStorage. Messages are expected in the same text
- * format produced by FileOutputStrategy / AlertManager, e.g.
- *
- * Patient ID: 1, Timestamp: 1234567890, Label: Saturation, Data: 98%
  *
  * The parser will special-case `Alert` and `Saturation` similarly to
  * FileDataReader.
@@ -29,6 +25,7 @@ public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
 
     @Override
     public void onMessage(String message) {
+        // System.out.println(message);
         if (message == null || message.isEmpty()) return;
         // messages may contain multiple lines; process each
         String[] lines = message.split("\\r?\\n");
@@ -52,23 +49,12 @@ public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
      * Parses a single console-style data line and stores it in DataStorage.
      */
     private void processData(String line) {
+        // System.out.println("Captured "+line);
         try {
-            String[] parts = line.split(", ");
-            Map<String, String> vals = new HashMap<>();
-            for (String p : parts) {
-                String[] keyVals = p.split(": ", 2);
-                if (keyVals.length == 2) {
-                    vals.put(keyVals[0], keyVals[1]);
-                }
-            }
+            String[] parts = line.split(",");
 
-            if (!vals.containsKey("Patient ID") || !vals.containsKey("Timestamp") || !vals.containsKey("Label") || !vals.containsKey("Data")) {
-                // not a recognized message format; ignore
-                return;
-            }
-
-            String label = vals.get("Label");
-            String data = vals.get("Data");
+            String label = parts[2];
+            String data = parts[3];
 
             if ("Alert".equals(label)) {
                 if ("triggered".equalsIgnoreCase(data)) {
@@ -82,9 +68,9 @@ public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
                 data = data.replace("%", "");
             }
 
-            int patientId = Integer.parseInt(vals.get("Patient ID"));
+            int patientId = Integer.parseInt(parts[0]);
             double measurementValue = Double.parseDouble(data);
-            long timestamp = Long.parseLong(vals.get("Timestamp"));
+            long timestamp = Long.parseLong(parts[1]);
 
             dataStorage.addPatientData(patientId, measurementValue, label, timestamp);
         } catch (Exception ex) {

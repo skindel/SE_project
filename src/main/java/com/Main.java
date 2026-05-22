@@ -20,23 +20,13 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        int port = 8080;
 
-        
-        String defaultWs = "ws://localhost:8080";
+        String wsUri = "ws://localhost:"+port;
 
         // create storage and alert manager
         DataStorage dataStorage = DataStorage.getInstance();
         AlertManager alertManager = new AlertManager(dataStorage);
-
-        // determine websocket URI from arguments (--ws=ws://host:port)
-        String wsUri = defaultWs;
-        // for (int i = 0; i < args.length; i++) {
-        //     if (args[i].equals("--output")) {
-        //         if(args[i+1].equals("websocket")){
-        //             wsUri=
-        //         }
-        //     }
-        // }
 
         WebSocketClient wsClient = null;
         try {
@@ -54,8 +44,6 @@ public class Main {
                 finalClient.stopClient();
             }
         }));
-
-       
 
         // keep main thread alive while background threads run
         try {

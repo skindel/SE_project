@@ -18,6 +18,7 @@ import com.cardio_generator.outputs.TcpOutputStrategy;
 import com.cardio_generator.outputs.WebSocketOutputStrategy;
 import com.data_management.DataStorage;
 import com.data_management.FileDataReader;
+import com.data_management.WebSocketCWrapper;
 
 import java.util.Collections;
 import java.util.List;
@@ -113,6 +114,8 @@ public class HealthDataSimulator {
                                 // Initialize your WebSocket output strategy here
                                 outputStrategy = new WebSocketOutputStrategy(port);
                                 System.out.println("WebSocket output will be on port: " + port);
+
+                                WebSocketCWrapper.run(port);
                             } catch (NumberFormatException e) {
                                 System.err.println(
                                         "Invalid port for WebSocket output. Please specify a valid port number.");

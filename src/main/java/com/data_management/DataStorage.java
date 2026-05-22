@@ -64,6 +64,7 @@ public class DataStorage {
         }
         patient.addRecord(measurementValue, recordType, timestamp);
         updateQueue.add(new PatientUpdate(patient, recordType, timestamp));
+        // System.out.println(measurementValue +" "+ recordType+ " "+ timestamp);
     }
 
     public ConcurrentLinkedQueue<PatientUpdate> getUpdateQueue(){
